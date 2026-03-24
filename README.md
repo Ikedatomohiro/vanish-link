@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Vanish Link
 
-## Getting Started
+消える。だから、安心。
 
-First, run the development server:
+1回限りの閲覧で自動消滅する、安全な機密情報共有リンクを生成するWebアプリケーションです。
+
+## 特徴
+
+- **エンドツーエンド暗号化** - AES-256-GCMによるクライアントサイド暗号化。サーバーには暗号文のみ保存
+- **ゼロ知識設計** - 復号鍵はURLフラグメント(#)に埋め込まれ、サーバーには送信されない
+- **1回限りの閲覧** - 閲覧後、即座にサーバーからデータを物理削除
+- **自動消滅** - TTL（1時間/24時間/7日）による自動データ消滅
+- **パスワード保護** - オプションでパスワードによる二重暗号化
+- **ログイン不要** - 誰でもすぐに使える
+
+## 技術スタック
+
+- **Framework:** Next.js 15 (App Router)
+- **Language:** TypeScript (Strict mode)
+- **Styling:** Tailwind CSS v4 + shadcn/ui
+- **Database:** Upstash Redis (TTL付き一時保存)
+- **Encryption:** Web Crypto API (AES-256-GCM)
+- **Deployment:** Vercel
+
+## セットアップ
+
+### 1. 依存関係のインストール
+
+```bash
+npm install
+```
+
+### 2. Upstash Redisの設定
+
+[Upstash Console](https://console.upstash.com) でRedisデータベースを作成し、`.env.local`に接続情報を設定:
+
+```bash
+cp .env.example .env.local
+```
+
+```env
+UPSTASH_REDIS_REST_URL=https://your-redis-url.upstash.io
+UPSTASH_REDIS_REST_TOKEN=your-redis-token
+```
+
+### 3. 開発サーバーの起動
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+http://localhost:3000 を開いてください。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## デプロイ (Vercel)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. GitHubリポジトリをVercelに接続
+2. 環境変数 `UPSTASH_REDIS_REST_URL` と `UPSTASH_REDIS_REST_TOKEN` を設定
+3. デプロイ
 
-## Learn More
+## セキュリティ設計
 
-To learn more about Next.js, take a look at the following resources:
+```
+[ユーザー入力] → [クライアントサイドAES-GCM暗号化] → [暗号文をサーバーに送信]
+                                                           ↓
+[URLに復号鍵を埋め込み] ← [UUID返却] ← [Redis (TTL付き) に保存]
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+[閲覧者がURL開く] → [サーバーからGETDEL] → [クライアントサイド復号] → [表示]
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- 復号鍵はURLフラグメント(`#`以降)に含まれるため、サーバーに送信されない
+- サーバー管理者も暗号文しか見えない（ゼロ知識）
+- `GETDEL`コマンドで取得と削除をアトミックに実行
