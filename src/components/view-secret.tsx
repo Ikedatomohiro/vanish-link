@@ -42,6 +42,7 @@ export function ViewSecret({ id }: ViewSecretProps) {
   const [password, setPassword] = useState("");
   const [isDecrypting, setIsDecrypting] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [keyBase64, setKeyBase64] = useState<string | null>(null);
 
   // URLフラグメントから復号鍵を取得
@@ -283,20 +284,37 @@ export function ViewSecret({ id }: ViewSecretProps) {
         <CardContent className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="view-password">パスワード</Label>
-            <Input
-              id="view-password"
-              type="password"
-              placeholder="パスワードを入力"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && password) {
-                  encryptedData ? retryDecrypt() : revealSecret();
-                }
-              }}
-              autoComplete="off"
-              autoFocus
-            />
+            <div className="relative">
+              <Input
+                id="view-password"
+                type={showPassword ? "text" : "password"}
+                placeholder="パスワードを入力"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && password) {
+                    encryptedData ? retryDecrypt() : revealSecret();
+                  }
+                }}
+                autoComplete="off"
+                autoFocus
+                className="pr-10"
+              />
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? (
+                  <EyeOff className="h-3.5 w-3.5" />
+                ) : (
+                  <Eye className="h-3.5 w-3.5" />
+                )}
+                <span className="sr-only">パスワード表示切り替え</span>
+              </Button>
+            </div>
           </div>
           <Button
             onClick={encryptedData ? retryDecrypt : revealSecret}

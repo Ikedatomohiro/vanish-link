@@ -15,6 +15,7 @@ import {
   Check,
   Loader2,
   Eye,
+  EyeOff,
   Shield,
   Timer,
   KeyRound,
@@ -37,6 +38,7 @@ export function CreateSecretForm() {
   const [usePassword, setUsePassword] = useState(false);
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [generatedUrl, setGeneratedUrl] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
@@ -248,13 +250,30 @@ export function CreateSecretForm() {
               />
             </div>
             {usePassword && (
-              <Input
-                type="password"
-                placeholder="閲覧時に必要なパスワード"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                autoComplete="off"
-              />
+              <div className="relative">
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="閲覧時に必要なパスワード"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  autoComplete="off"
+                  className="pr-10"
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-3.5 w-3.5" />
+                  ) : (
+                    <Eye className="h-3.5 w-3.5" />
+                  )}
+                  <span className="sr-only">パスワード表示切り替え</span>
+                </Button>
+              </div>
             )}
           </div>
 
