@@ -17,10 +17,49 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Vanish Link - 消える機密共有リンク",
+  title: "Vanish Link - パスワードを安全に送る無料ツール｜ワンタイムリンク生成",
   description:
-    "1回限りの閲覧で自動消滅する、安全な機密情報共有リンクを生成します。エンドツーエンド暗号化でサーバーにも内容は見えません。",
-  keywords: ["パスワード共有", "機密情報", "ワンタイムリンク", "暗号化", "セキュリティ"],
+    "パスワードやAPIキーを安全に共有できる無料ツール。1回閲覧で自動消滅するワンタイムリンクを生成。エンドツーエンド暗号化でサーバーにもデータは残りません。ログイン不要で今すぐ使えます。",
+  keywords: [
+    "パスワード 安全に送る",
+    "パスワード 共有 方法",
+    "パスワード 安全 送信",
+    "機密情報 共有",
+    "ワンタイムリンク",
+    "ワンタイムURL",
+    "秘密のリンク",
+    "自動消滅リンク",
+    "パスワード送信ツール",
+    "暗号化リンク",
+    "セキュリティ",
+    "E2E暗号化",
+    "Slack パスワード 送る",
+    "パスワード メール 危険",
+    "one time secret",
+    "password sharing tool",
+    "secure link generator",
+  ],
+  openGraph: {
+    title: "Vanish Link - パスワードを安全に送る無料ツール",
+    description:
+      "1回閲覧で自動消滅。ログイン不要・無料でパスワードやAPIキーを安全に共有できるワンタイムリンク生成ツール。",
+    type: "website",
+    locale: "ja_JP",
+    siteName: "Vanish Link",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Vanish Link - パスワードを安全に送る無料ツール",
+    description:
+      "1回閲覧で自動消滅。ログイン不要でパスワードを安全に共有。エンドツーエンド暗号化。",
+  },
+  alternates: {
+    canonical: "https://vanish-link.vercel.app",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({

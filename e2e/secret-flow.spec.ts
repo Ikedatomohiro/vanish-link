@@ -4,7 +4,7 @@ test.describe("Vanish Link E2E", () => {
   test("一連のフロー: 作成 → 閲覧 → 消滅確認", async ({ page }) => {
     // ===== 1. トップページを開く =====
     await page.goto("/");
-    await expect(page.getByText("消える。だから、")).toBeVisible();
+    await expect(page.getByText("パスワードを安全に送る。")).toBeVisible();
 
     // ===== 2. 機密テキストを入力 =====
     const secretText = "テスト用パスワード: S3cret!2026";
