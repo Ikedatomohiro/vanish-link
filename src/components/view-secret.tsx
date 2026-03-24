@@ -190,9 +190,12 @@ export function ViewSecret({ id }: ViewSecretProps) {
             このリンクは閲覧済みか、有効期限切れのため自動消滅しました。
             データはサーバーから完全に削除されています。
           </p>
-          <Button variant="outline" render={<Link href="/" />}>
+          <Link
+            href="/"
+            className="inline-flex items-center justify-center rounded-lg border border-border bg-background px-4 h-8 text-sm font-medium hover:bg-muted transition-colors"
+          >
             新しいリンクを作成
-          </Button>
+          </Link>
         </CardContent>
       </Card>
     );
@@ -210,9 +213,12 @@ export function ViewSecret({ id }: ViewSecretProps) {
           <p className="text-sm text-muted-foreground mb-6">
             リンクが不正か、サーバーエラーが発生しました。
           </p>
-          <Button variant="outline" render={<Link href="/" />}>
+          <Link
+            href="/"
+            className="inline-flex items-center justify-center rounded-lg border border-border bg-background px-4 h-8 text-sm font-medium hover:bg-muted transition-colors"
+          >
             トップページへ戻る
-          </Button>
+          </Link>
         </CardContent>
       </Card>
     );

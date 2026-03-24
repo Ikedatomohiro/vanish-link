@@ -9,7 +9,7 @@ export async function GET(
     const { id } = await params;
     const key = `secret:${id}`;
 
-    const data = await getRedis().getdel<string>(key);
+    const data = await getRedis().getdel(key);
 
     if (!data) {
       return NextResponse.json(
@@ -18,7 +18,9 @@ export async function GET(
       );
     }
 
-    const record: SecretRecord = JSON.parse(data);
+    // Upstash SDKは自動でJSONパースするため、stringの場合もobjectの場合もある
+    const record: SecretRecord =
+      typeof data === "string" ? JSON.parse(data) : data;
 
     return NextResponse.json({
       encryptedData: record.encryptedData,

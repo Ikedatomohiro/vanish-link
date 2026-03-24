@@ -58,25 +58,28 @@ class InMemoryRedis {
 const useInMemory =
   !process.env.UPSTASH_REDIS_REST_URL || !process.env.UPSTASH_REDIS_REST_TOKEN;
 
-let _redis: Redis | null = null;
-let _memoryRedis: InMemoryRedis | null = null;
+// globalThisでインスタンスを保持（Next.js dev環境のHMRによるリセットを防ぐ）
+const globalForRedis = globalThis as unknown as {
+  _redis?: Redis;
+  _memoryRedis?: InMemoryRedis;
+};
 
 export function getRedis(): Redis | InMemoryRedis {
   if (useInMemory) {
-    if (!_memoryRedis) {
+    if (!globalForRedis._memoryRedis) {
       console.warn(
         "[Vanish Link] Upstash Redis未設定のため、インメモリストアを使用します（開発用）"
       );
-      _memoryRedis = new InMemoryRedis();
+      globalForRedis._memoryRedis = new InMemoryRedis();
     }
-    return _memoryRedis;
+    return globalForRedis._memoryRedis;
   }
 
-  if (!_redis) {
-    _redis = new Redis({
+  if (!globalForRedis._redis) {
+    globalForRedis._redis = new Redis({
       url: process.env.UPSTASH_REDIS_REST_URL!,
       token: process.env.UPSTASH_REDIS_REST_TOKEN!,
     });
   }
-  return _redis;
+  return globalForRedis._redis;
 }

@@ -13,9 +13,10 @@ export async function GET(
     const exists = await redis.exists(key);
 
     if (exists) {
-      const data = await redis.get<string>(key);
+      const data = await redis.get(key);
       if (data) {
-        const record = JSON.parse(data);
+        // Upstash SDKは自動でJSONパースするため、stringの場合もobjectの場合もある
+        const record = typeof data === "string" ? JSON.parse(data) : data;
         return NextResponse.json({
           exists: true,
           hasPassword: record.hasPassword ?? false,
