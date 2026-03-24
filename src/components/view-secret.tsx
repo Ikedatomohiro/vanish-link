@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { decrypt } from "@/lib/crypto";
+import { copyToClipboard } from "@/lib/clipboard";
 import Link from "next/link";
 
 interface ViewSecretProps {
@@ -156,7 +157,7 @@ export function ViewSecret({ id }: ViewSecretProps) {
 
   const handleCopy = async () => {
     if (!decryptedText) return;
-    await navigator.clipboard.writeText(decryptedText);
+    await copyToClipboard(decryptedText);
     setCopied(true);
     toast.success("コピーしました");
     setTimeout(() => setCopied(false), 2000);

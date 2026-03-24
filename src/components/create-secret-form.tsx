@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { encrypt } from "@/lib/crypto";
+import { copyToClipboard } from "@/lib/clipboard";
 
 type TTLOption = "1h" | "24h" | "7d";
 
@@ -95,7 +96,7 @@ export function CreateSecretForm() {
 
   const handleCopy = async () => {
     if (!generatedUrl) return;
-    await navigator.clipboard.writeText(generatedUrl);
+    await copyToClipboard(generatedUrl);
     setCopied(true);
     toast.success("クリップボードにコピーしました");
     setTimeout(() => setCopied(false), 2000);
